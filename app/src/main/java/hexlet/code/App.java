@@ -1,7 +1,11 @@
 package hexlet.code;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import picocli.CommandLine;
 
+import java.io.File;
+import java.util.Map;
 import java.util.concurrent.Callable;
 
 @CommandLine.Command(name = "gendiff",
@@ -27,6 +31,24 @@ public class App implements Callable <Integer> {
 
     @Override
     public Integer call() throws Exception {
-        return null;
+        ObjectMapper objectMapper;
+        if (filepath1.endsWith(".yaml") || filepath1.endsWith(".yml")) {
+            objectMapper = new ObjectMapper(new YAMLFactory());
+        } else {
+            objectMapper = new ObjectMapper();  // JSON по умолчанию
+        }
+
+        // Чтение и парсинг первого файла
+        Map<String, Object> data1 = objectMapper.readValue(new File(filepath1), Map.class);
+
+        // Чтение и парсинг второго файла
+        Map<String, Object> data2 = objectMapper.readValue(new File(filepath2), Map.class);
+
+        // Сравнение данных и вывод результатов
+        System.out.println("Сравнение файлов:");
+        System.out.println("Файл 1: " + data1);
+        System.out.println("Файл 2: " + data2);
+
+        return 0;
     }
 }
