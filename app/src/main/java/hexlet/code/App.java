@@ -31,23 +31,12 @@ public class App implements Callable <Integer> {
 
     @Override
     public Integer call() throws Exception {
-        ObjectMapper objectMapper;
-        if (filepath1.endsWith(".yaml") || filepath1.endsWith(".yml")) {
-            objectMapper = new ObjectMapper(new YAMLFactory());
-        } else {
-            objectMapper = new ObjectMapper();  // JSON по умолчанию
-        }
+        Map<String, Object> data1 = Parser.parse(filepath1);
+        Map<String, Object> data2 = Parser.parse(filepath2);
 
-        // Чтение и парсинг первого файла
-        Map<String, Object> data1 = objectMapper.readValue(new File(filepath1), Map.class);
+        String result = Differ.compare(data1, data2, format);
 
-        // Чтение и парсинг второго файла
-        Map<String, Object> data2 = objectMapper.readValue(new File(filepath2), Map.class);
-
-        // Сравнение данных и вывод результатов
-        System.out.println("Сравнение файлов:");
-        System.out.println("Файл 1: " + data1);
-        System.out.println("Файл 2: " + data2);
+        System.out.println(result);
 
         return 0;
     }
