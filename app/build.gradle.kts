@@ -2,6 +2,7 @@ plugins {
     id("java")
     application
     checkstyle
+    jacoco
 }
 
 group = "hexlet.code"
@@ -28,6 +29,8 @@ dependencies {
     implementation ("com.fasterxml.jackson.core:jackson-annotations:2.15.0")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.18.1")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.18.1")
+
+    testImplementation ("org.skyscreamer:jsonassert:2.0-rc1")
 }
 
 tasks.test {
@@ -35,4 +38,9 @@ tasks.test {
 }
 tasks.getByName("run", JavaExec::class) {
     standardInput = System.`in`
+}
+tasks.jacocoTestReport {
+    reports {
+        xml.required.set(true)
+    }
 }
