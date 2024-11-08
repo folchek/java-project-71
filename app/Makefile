@@ -3,4 +3,4 @@ run-dist:
 
 
 build-run: build run
-		.PHONY: install run-dist build run test report lint build-run
+.PHONY: build
