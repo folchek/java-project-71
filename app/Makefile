@@ -1,6 +1,37 @@
-run-dist:
-	C:\Users\bespa\MyProjects\java-project-71\app\build\install\app\bin\app.bat
+.DEFAULT_GOAL := build-run
 
+clean:
+	make -C app clean
 
-build-run: build run
+build:
+	make -C app build
+
+install-dist:
+	make -C app installDist
+
+run:
+	make -C app run
+
+test:
+	make -C app test
+
+report:
+	make -C app report
+
+lint:
+	make -C lint
+	./gradlew checkstyleMain checkstyleTest
+
+checkstyle:
+	make -C app checkstyle
+
+run-dist-json-stylish:
+	make -C app run-dist-json-stylish
+
+run-dist-json-plain:
+	make -C app run-dist-json-plain
+
+run-dist-json-json:
+	make -C app run-dist-json-json
+
 .PHONY: build
