@@ -1,33 +1,34 @@
 package hexlet.code.formatters;
 
+import hexlet.code.Status;
 import java.util.List;
 import java.util.Map;
 
 public final class Plain implements StringFormatter {
 
     @Override
-    public String format(List<Map<String, Object>> differNodeList) {
-        List<Map<String, Object>> filteredList = differNodeList.stream()
-                .filter(node -> !node.get("condition").equals("UNCHANGED"))
+    public String format(List<Status> differNodeList) {
+        List<Status> filteredList = differNodeList.stream()
+                .filter(node -> !node.getStatusName().equals(Status.UNCHANGED))
                 .toList();
 
         StringBuilder sb = new StringBuilder();
 
-        for (Map<String, Object> node : filteredList) {
-            String condition = (String) node.get("condition");
+        for (Status node : filteredList) {
+            String condition = node.getStatusName();
             switch (condition) {
-                case "ADDED" -> {
-                    String value = formatComplexValue(node.get("value"));
+                case Status.ADDED -> {
+                    String value = formatComplexValue(node.getNewValue());
                     sb.append("Property '%s' was added with value: %s%n"
-                            .formatted(node.get("key"), value));
+                            .formatted(node.getStatusName(), value));
                 }
-                case "DELETED" -> sb.append("Property '%s' was removed%n"
-                        .formatted(node.get("key")));
-                case "CHANGED" -> {
-                    String value1 = formatComplexValue(node.get("value1"));
-                    String value2 = formatComplexValue(node.get("value2"));
+                case Status.DELETED -> sb.append("Property '%s' was removed%n"
+                        .formatted(node.getStatusName()));
+                case Status.CHANGED -> {
+                    String value1 = formatComplexValue(node.getOldValue());
+                    String value2 = formatComplexValue(node.getNewValue());
                     sb.append("Property '%s' was updated. From %s to %s%n"
-                            .formatted(node.get("key"), value1, value2));
+                            .formatted(node.getStatusName(), value1, value2));
                 }
                 default -> throw new IllegalStateException("Unexpected value: " + condition);
             }

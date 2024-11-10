@@ -29,73 +29,43 @@ public final class AppTest {
     @BeforeEach
     void setUp() throws Exception {
         System.setOut(new PrintStream(output));
-        Path pathStylish =  Differ.getPath(getPathToFixture("EXPECTED_STYLISH"));
-        expectedStylish = Differ.readFile(pathStylish);
-        Path pathPlain = Differ.getPath(getPathToFixture("EXPECTED_PLAIN"));
-        expectedPlain = Differ.readFile(pathPlain);
-        Path pathJson = Differ.getPath(getPathToFixture("EXPECTED_JSON"));
-        expectedJson = Differ.readFile(pathJson);
+        expectedStylish = Differ.readFile(Differ.getPath(getPathToFixture("EXPECTED_STYLISH")));
+        expectedPlain = Differ.readFile(Differ.getPath(getPathToFixture("EXPECTED_PLAIN")));
+        expectedJson = Differ.readFile(Differ.getPath(getPathToFixture("EXPECTED_JSON")));
     }
 
     @Test
     @DisplayName("App works correctly")
     void testSuccessExitCode() throws Exception {
-        String[] argsYamlStylish = new String[]{
-                "-f=stylish",
-                getPathToFixture("fileNested1.json"),
-                getPathToFixture("fileNested2.json")
-        };
-        int exitCode1 = new CommandLine(new App()).execute(argsYamlStylish);
-        assertEquals(expectedStylish, output.toString(StandardCharsets.UTF_8).trim());
-        assertEquals(SUCCESS_EXIT_CODE, exitCode1);
+        runTestWithArgs(new String[]{"-f=stylish", getPathToFixture("fileNested1.json"), getPathToFixture("fileNested2.json")}, expectedStylish);
+        runTestWithArgs(new String[]{"-f=plain", getPathToFixture("fileNested3.yml"), getPathToFixture("fileNested4.yml")}, expectedPlain);
 
-        output.reset();
-
-        String[] argsYamlPlain = new String[]{
-                "-f=plain",
-                getPathToFixture("fileNested3.yml"),
-                getPathToFixture("fileNested4.yml")
-        };
-        int exitCode2 = new CommandLine(new App()).execute(argsYamlPlain);
-        assertEquals(expectedPlain, output.toString(StandardCharsets.UTF_8).trim());
-        assertEquals(SUCCESS_EXIT_CODE, exitCode2);
-
-        output.reset();
-
-        String[] argsYamlJson = new String[]{
-                "-f=json",
-                getPathToFixture("fileNested3.yml"),
-                getPathToFixture("fileNested2.json")
-        };
-        int exitCode3 = new CommandLine(new App()).execute(argsYamlJson);
-        String actualJson = output.toString(StandardCharsets.UTF_8).trim();
-        JSONAssert.assertEquals(expectedJson, actualJson, JSONCompareMode.STRICT);
-        assertEquals(SUCCESS_EXIT_CODE, exitCode3);
+        String[] argsYamlJson = {"-f=json", getPathToFixture("fileNested3.yml"), getPathToFixture("fileNested2.json")};
+        int exitCode = new CommandLine(new App()).execute(argsYamlJson);
+        JSONAssert.assertEquals(expectedJson, output.toString(StandardCharsets.UTF_8).trim(), JSONCompareMode.STRICT);
+        assertEquals(SUCCESS_EXIT_CODE, exitCode);
     }
 
     @Test
     @DisplayName("App returns error exit code when provided with incorrect args")
     void testErrorExitCode() {
-        String[] argsWrongFormat = new String[]{
-                "-f=stailish",
-                getPathToFixture("fileNested1.json"),
-                getPathToFixture("fileNested2.json")
-        };
-        int exitCode2 = new CommandLine(new App()).execute(argsWrongFormat);
-        assertEquals(ERROR_EXIT_CODE, exitCode2);
+        int exitCode = new CommandLine(new App()).execute(new String[]{"-f=stailish", getPathToFixture("fileNested1.json"), getPathToFixture("fileNested2.json")});
+        assertEquals(ERROR_EXIT_CODE, exitCode);
 
-        String[] argsFileNotExist = new String[]{
-                "-f=stylish",
-                getPathToFixture("file.yml"),
-                getPathToFixture("fileNested3.yml")
-        };
-        int exitCode3 = new CommandLine(new App()).execute(argsFileNotExist);
-        assertEquals(ERROR_EXIT_CODE, exitCode3);
+        exitCode = new CommandLine(new App()).execute(new String[]{"-f=stylish", getPathToFixture("file.yml"), getPathToFixture("fileNested3.yml")});
+        assertEquals(ERROR_EXIT_CODE, exitCode);
     }
 
     @AfterEach
     void tearDown() {
         System.setOut(standardOut);
+    }
+
+    private void runTestWithArgs(String[] args, String expectedOutput) throws Exception {
+        output.reset();
+        int exitCode = new CommandLine(new App()).execute(args);
+        assertEquals(expectedOutput, output.toString(StandardCharsets.UTF_8).trim());
+        assertEquals(SUCCESS_EXIT_CODE, exitCode);
     }
 
     private String getPathToFixture(String file) {

@@ -1,7 +1,5 @@
 package hexlet.code;
 
-import java.nio.file.Path;
-
 import org.skyscreamer.jsonassert.JSONCompareMode;
 import org.skyscreamer.jsonassert.JSONAssert;
 
@@ -16,97 +14,55 @@ public final class DifferTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        Path validPathStylish = Differ.getPath(getPathToFixture("EXPECTED_STYLISH"));
-        expectedStylish = Differ.readFile(validPathStylish);
-        Path validPathPlain = Differ.getPath(getPathToFixture("EXPECTED_PLAIN"));
-        expectedPlain = Differ.readFile(validPathPlain);
-        Path validPathJson = Differ.getPath(getPathToFixture("EXPECTED_JSON"));
-        expectedJson = Differ.readFile(validPathJson);
+        expectedStylish = Differ.readFile(Differ.getPath(getPathToFixture("EXPECTED_STYLISH")));
+        expectedPlain = Differ.readFile(Differ.getPath(getPathToFixture("EXPECTED_PLAIN")));
+        expectedJson = Differ.readFile(Differ.getPath(getPathToFixture("EXPECTED_JSON")));
     }
 
     @Test
     void testGenerateWithTwoArgs() throws Exception {
-        String actualStylish = Differ.generate(
-                getPathToFixture("fileNested1.json"),
-                getPathToFixture("fileNested4.yml")
-        );
-
+        String actualStylish = Differ.generate(getPathToFixture("fileNested1.json"), getPathToFixture("fileNested4.yml"));
         assertEquals(expectedStylish, actualStylish);
     }
 
     @Test
     void testGenerateWithThreeArgs() throws Exception {
-        String actualStylish = Differ.generate(
-                getPathToFixture("fileNested1.json"),
-                getPathToFixture("fileNested4.yml"),
-                "stylish"
-        );
-        assertEquals(expectedStylish, actualStylish);
+        assertEquals(expectedStylish, Differ.generate(getPathToFixture("fileNested1.json"), getPathToFixture("fileNested4.yml"), "stylish"));
     }
 
-    //проверка generate с файлами json
     @Test
     void testGenerateWithJson() throws Exception {
-        String actualStylish = Differ.generate(
-                getPathToFixture("fileNested1.json"),
-                getPathToFixture("fileNested2.json"),
-                "stylish"
-        );
-        assertEquals(expectedStylish, actualStylish);
+        assertEquals(expectedStylish, Differ.generate(getPathToFixture("fileNested1.json"), getPathToFixture("fileNested2.json"), "stylish"));
     }
 
     @Test
     void testGenerateWithJsonPlain() throws Exception {
-        String actualPlain = Differ.generate(
-                getPathToFixture("fileNested1.json"),
-                getPathToFixture("fileNested2.json"),
-                "plain"
-        );
-        assertEquals(expectedPlain, actualPlain);
+        assertEquals(expectedPlain, Differ.generate(getPathToFixture("fileNested1.json"), getPathToFixture("fileNested2.json"), "plain"));
     }
 
     @Test
     void testGenerateWithJsonJson() throws Exception {
-        String actualJson = Differ.generate(
-                getPathToFixture("fileNested1.json"),
-                getPathToFixture("fileNested2.json"),
-                "json"
-        );
+        String actualJson = Differ.generate(getPathToFixture("fileNested1.json"), getPathToFixture("fileNested2.json"), "json");
         JSONAssert.assertEquals(expectedJson, actualJson, JSONCompareMode.STRICT);
     }
 
-    //проверка generate с файлами YAML (работает корректно)
     @Test
     void testGenerateWithYaml() throws Exception {
-        String actualStylish = Differ.generate(
-                getPathToFixture("fileNested3.yml"),
-                getPathToFixture("fileNested4.yml"),
-                "stylish"
-        );
-        assertEquals(expectedStylish, actualStylish);
+        assertEquals(expectedStylish, Differ.generate(getPathToFixture("fileNested3.yml"), getPathToFixture("fileNested4.yml"), "stylish"));
     }
 
     @Test
     void testGenerateWithYamlPlain() throws Exception {
-        String actualPlain = Differ.generate(
-                getPathToFixture("fileNested3.yml"),
-                getPathToFixture("fileNested4.yml"),
-                "plain"
-        );
-        assertEquals(expectedPlain, actualPlain);
+        assertEquals(expectedPlain, Differ.generate(getPathToFixture("fileNested3.yml"), getPathToFixture("fileNested4.yml"), "plain"));
     }
 
     @Test
     void testGenerateWithYamlJson() throws Exception {
-        String actualJson = Differ.generate(
-                getPathToFixture("fileNested3.yml"),
-                getPathToFixture("fileNested4.yml"),
-                "json"
-        );
+        String actualJson = Differ.generate(getPathToFixture("fileNested3.yml"), getPathToFixture("fileNested4.yml"), "json");
         JSONAssert.assertEquals(expectedJson, actualJson, JSONCompareMode.STRICT);
     }
 
-    public String getPathToFixture(String file) {
+    private String getPathToFixture(String file) {
         return "./src/test/resources/" + file;
     }
 }

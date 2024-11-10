@@ -23,7 +23,7 @@ public class App implements Callable<Integer> {
             description = "output format: stylish, plain, json, "
                     + "no-format [default: ${DEFAULT-VALUE}]",
             defaultValue = "stylish")
-    private String format = "stylish";
+    private String format;
 
     public static void main(String[] args) throws IOException {
         int exitCode = new CommandLine(new App()).execute(args);

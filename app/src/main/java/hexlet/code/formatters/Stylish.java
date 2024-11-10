@@ -1,31 +1,30 @@
 package hexlet.code.formatters;
 
+import hexlet.code.Status;
 import java.util.List;
-import java.util.Map;
-
 
 public final class Stylish implements StringFormatter {
 
     @Override
-    public String format(List<Map<String, Object>> differDifferNodeList) {
+    public String format(List<Status> differNodeList) {
         StringBuilder sb = new StringBuilder("{\n");
         final int indentation = 2;
 
-        for (Map<String, Object> node : differDifferNodeList) {
-            String condition = (String) node.get("condition");
+        for (Status node : differNodeList) {
+            String condition = node.getStatusName();
             switch (condition) {
-                case "ADDED" -> sb.append(" ".repeat(indentation))
-                        .append("+ %s: %s%n".formatted(node.get("key"), node.get("value")));
-                case "DELETED" -> sb.append(" ".repeat(indentation))
-                        .append("- %s: %s%n".formatted(node.get("key"), node.get("value")));
-                case "CHANGED" -> {
+                case Status.ADDED -> sb.append(" ".repeat(indentation))
+                        .append("+ %s: %s%n".formatted(node.getStatusName(), node.getNewValue()));
+                case Status.DELETED -> sb.append(" ".repeat(indentation))
+                        .append("- %s: %s%n".formatted(node.getStatusName(), node.getOldValue()));
+                case Status.CHANGED -> {
                     sb.append(" ".repeat(indentation))
-                            .append("- %s: %s%n".formatted(node.get("key"), node.get("value1")));
+                            .append("- %s: %s%n".formatted(node.getStatusName(), node.getOldValue()));
                     sb.append(" ".repeat(indentation))
-                            .append("+ %s: %s%n".formatted(node.get("key"), node.get("value2")));
+                            .append("+ %s: %s%n".formatted(node.getStatusName(), node.getNewValue()));
                 }
-                case "UNCHANGED" -> sb.append(" ".repeat(indentation))
-                        .append("  %s: %s%n".formatted(node.get("key"), node.get("value")));
+                case Status.UNCHANGED -> sb.append(" ".repeat(indentation))
+                        .append("  %s: %s%n".formatted(node.getStatusName(), node.getOldValue()));
                 default -> throw new IllegalStateException("Unexpected value: " + condition);
             }
         }
