@@ -73,6 +73,6 @@ public final class AppTest {
     }
 
     private String getPathToFixture(String file) {
-        return ".\\src\\test\\resources\\" + file;
+        return "\"C:\\Users\\bespa\\MyProjects\\java-project-71\\app\\src\\test\\resources\"" + file;
     }
 }
