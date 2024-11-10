@@ -7,7 +7,6 @@ import org.skyscreamer.jsonassert.JSONAssert;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Path;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,10 +36,13 @@ public final class AppTest {
     @Test
     @DisplayName("App works correctly")
     void testSuccessExitCode() throws Exception {
-        runTestWithArgs(new String[]{"-f=stylish", getPathToFixture("fileNested1.json"), getPathToFixture("fileNested2.json")}, expectedStylish);
-        runTestWithArgs(new String[]{"-f=plain", getPathToFixture("fileNested3.yml"), getPathToFixture("fileNested4.yml")}, expectedPlain);
+        runTestWithArgs(new String[]{"-f=stylish",
+                getPathToFixture("fileNested1.json"), getPathToFixture("fileNested2.json")}, expectedStylish);
+        runTestWithArgs(new String[]{"-f=plain",
+                getPathToFixture("fileNested3.yml"), getPathToFixture("fileNested4.yml")}, expectedPlain);
 
-        String[] argsYamlJson = {"-f=json", getPathToFixture("fileNested3.yml"), getPathToFixture("fileNested2.json")};
+        String[] argsYamlJson = {"-f=json",
+                getPathToFixture("fileNested3.yml"), getPathToFixture("fileNested2.json")};
         int exitCode = new CommandLine(new App()).execute(argsYamlJson);
         JSONAssert.assertEquals(expectedJson, output.toString(StandardCharsets.UTF_8).trim(), JSONCompareMode.STRICT);
         assertEquals(SUCCESS_EXIT_CODE, exitCode);
@@ -49,10 +51,12 @@ public final class AppTest {
     @Test
     @DisplayName("App returns error exit code when provided with incorrect args")
     void testErrorExitCode() {
-        int exitCode = new CommandLine(new App()).execute(new String[]{"-f=stailish", getPathToFixture("fileNested1.json"), getPathToFixture("fileNested2.json")});
+        int exitCode = new CommandLine(new App()).execute(new String[]{"-f=stailish",
+                getPathToFixture("fileNested1.json"), getPathToFixture("fileNested2.json")});
         assertEquals(ERROR_EXIT_CODE, exitCode);
 
-        exitCode = new CommandLine(new App()).execute(new String[]{"-f=stylish", getPathToFixture("file.yml"), getPathToFixture("fileNested3.yml")});
+        exitCode = new CommandLine(new App()).execute(new String[]{"-f=stylish",
+                getPathToFixture("file.yml"), getPathToFixture("fileNested3.yml")});
         assertEquals(ERROR_EXIT_CODE, exitCode);
     }
 

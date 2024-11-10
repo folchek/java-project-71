@@ -21,44 +21,57 @@ public final class DifferTest {
 
     @Test
     void testGenerateWithTwoArgs() throws Exception {
-        String actualStylish = Differ.generate(getPathToFixture("fileNested1.json"), getPathToFixture("fileNested4.yml"));
+        String actualStylish = Differ.generate(getPathToFixture("fileNested1.json"),
+                getPathToFixture("fileNested4.yml"));
         assertEquals(expectedStylish, actualStylish);
     }
 
     @Test
     void testGenerateWithThreeArgs() throws Exception {
-        assertEquals(expectedStylish, Differ.generate(getPathToFixture("fileNested1.json"), getPathToFixture("fileNested4.yml"), "stylish"));
+        assertEquals(expectedStylish,
+                Differ.generate(getPathToFixture("fileNested1.json"),
+                getPathToFixture("fileNested4.yml"), "stylish"));
     }
 
     @Test
     void testGenerateWithJson() throws Exception {
-        assertEquals(expectedStylish, Differ.generate(getPathToFixture("fileNested1.json"), getPathToFixture("fileNested2.json"), "stylish"));
+        assertEquals(expectedStylish,
+                Differ.generate(getPathToFixture("fileNested1.json"),
+                        getPathToFixture("fileNested2.json"), "stylish"));
     }
 
     @Test
     void testGenerateWithJsonPlain() throws Exception {
-        assertEquals(expectedPlain, Differ.generate(getPathToFixture("fileNested1.json"), getPathToFixture("fileNested2.json"), "plain"));
+        assertEquals(expectedPlain,
+                Differ.generate(getPathToFixture("fileNested1.json"),
+                        getPathToFixture("fileNested2.json"), "plain"));
     }
 
     @Test
     void testGenerateWithJsonJson() throws Exception {
-        String actualJson = Differ.generate(getPathToFixture("fileNested1.json"), getPathToFixture("fileNested2.json"), "json");
+        String actualJson = Differ.generate(getPathToFixture("fileNested1.json"),
+                getPathToFixture("fileNested2.json"), "json");
         JSONAssert.assertEquals(expectedJson, actualJson, JSONCompareMode.STRICT);
     }
 
     @Test
     void testGenerateWithYaml() throws Exception {
-        assertEquals(expectedStylish, Differ.generate(getPathToFixture("fileNested3.yml"), getPathToFixture("fileNested4.yml"), "stylish"));
+        assertEquals(expectedStylish,
+                Differ.generate(getPathToFixture("fileNested3.yml"),
+                        getPathToFixture("fileNested4.yml"), "stylish"));
     }
 
     @Test
     void testGenerateWithYamlPlain() throws Exception {
-        assertEquals(expectedPlain, Differ.generate(getPathToFixture("fileNested3.yml"), getPathToFixture("fileNested4.yml"), "plain"));
+        assertEquals(expectedPlain,
+                Differ.generate(getPathToFixture("fileNested3.yml"),
+                        getPathToFixture("fileNested4.yml"), "plain"));
     }
 
     @Test
     void testGenerateWithYamlJson() throws Exception {
-        String actualJson = Differ.generate(getPathToFixture("fileNested3.yml"), getPathToFixture("fileNested4.yml"), "json");
+        String actualJson = Differ.generate(getPathToFixture("fileNested3.yml"),
+                getPathToFixture("fileNested4.yml"), "json");
         JSONAssert.assertEquals(expectedJson, actualJson, JSONCompareMode.STRICT);
     }
 
