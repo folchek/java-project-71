@@ -22,7 +22,8 @@ dependencies {
     annotationProcessor("info.picocli:picocli-codegen:4.7.5")
 }
 tasks.withType<JavaCompile> {
-    options.release.set(17)
+    options.compilerArgs.add("-Xlint:unchecked")
+    options.compilerArgs.add("-Xlint:deprecation")
 }
 
 tasks.test {
