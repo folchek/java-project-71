@@ -4,7 +4,6 @@ import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
-import java.nio.file.Path;
 import java.util.concurrent.Callable;
 
 @Command(
@@ -20,14 +19,14 @@ public class App implements Callable<Integer> {
             description = "path to first file",
             paramLabel = "filepath1"
     )
-    private Path file1;
+    private String filePath1;
 
     @Parameters(
             index = "1",
             description = "path to second file",
             paramLabel = "filepath2"
     )
-    private Path file2;
+    private String filePath2;
 
     @Option(
             names = {"-f", "--format"},
@@ -38,9 +37,9 @@ public class App implements Callable<Integer> {
     private String format;
 
     @Override
-    public Integer call() {
-        System.out.printf("Comparing files:%n%s%n%s%nFormat: %s%n",
-                file1, file2, format);
+    public Integer call() throws Exception {
+        String diff = Differ.generate(filePath1, filePath2, format);
+        System.out.println(diff);
         return 0;
     }
 
